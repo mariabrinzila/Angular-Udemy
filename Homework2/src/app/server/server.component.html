@@ -1,0 +1,16 @@
+<!-- String Interpolation <=> {{ data }}, data must resolve to a string and can't be multi-lined -->
+<p> {{ 'Server' }} with ID {{ serverID }} is {{ getServerStatus() }} </p> 
+
+<hr> 
+
+<h2> Homework 2 </h2>
+
+<label> Username </label>
+
+<input type = "text" [(ngModel)] = "username"> 
+
+<p> The current username is: {{ username }} </p>
+
+<button class = "btn btn-primary" [disabled] = "isUsernameEmpty()" (click) = "resetUsername()"> 
+    Reset username 
+</button>
