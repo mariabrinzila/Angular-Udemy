@@ -1,0 +1,27 @@
+<hr>
+
+<h2> Homework 2 </h2>
+
+<label> Username </label>
+
+<input type = "text" [(ngModel)] = "username"> 
+
+<p> The current username is: {{ username }} </p>
+
+<button class = "btn btn-primary" [disabled] = "username === ''" (click) = "resetUsername()"> 
+    Reset username 
+</button>
+
+<hr>
+
+<h2> Homework 3 </h2>
+
+<button class = "btn btn-primary" (click) = "toggleDisplay()"> Display Details </button>
+
+<p *ngIf = "paragraphDisplay"> Here we have some random text </p>
+
+<p *ngFor = "let element of buttonClicksArray"
+    [ngStyle] = "{ backgroundColor: getBackgroundColor(element) }"
+    [ngClass] = "{ colored: getColored(element) }"> 
+    The current number of clicks is {{ element }} 
+</p>
