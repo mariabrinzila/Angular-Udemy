@@ -34,10 +34,7 @@ export class AppComponent implements OnInit {
   // Make a new instance of a service in a component <=> put it in the providers of that component
   
   // If you inject something into something else, that something else must have some metadata attached to it (for example @Component etc.)
-  // To inject a service into another service, we need to provide both services in the AppModule and use one of them in the other (using @Injectable as the metadata in the service you want to inject the other service in)
-  constructor(private accountsService: AccountsService) {}
-
-
+  // To inject a service into another service, we need to provide the service to be injected in the other service in the AppModule and use it in it (using @Injectable as the metadata in the service you want to inject the other service in)
   ngOnInit() {
     this.accounts = this.accountsService.accounts;
   }
