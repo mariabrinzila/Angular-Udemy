@@ -1,0 +1,17 @@
+<!-- String Interpolation <=> {{ data }}, data must resolve to a string and can't be multi-lined -->
+<p> Server ID is {{ serverID }} </p>
+
+<!-- ngStyle <=> attribute directive that allows us to dynamically change the CSS styling -->
+<!-- ngStyle received a JavaScript object -->
+<!-- the [] show property data binding -->
+<p [ngStyle] = "{ backgroundColor: getColor() }"> 
+    {{ 'Server' }} is {{ getServerStatus() }} 
+</p> 
+
+<!-- ngClass allows us to dynamically add / remove CSS classes -->
+<!-- ngClass received a JavaScript object -->
+<!-- the [] show property data binding -->
+<p [ngStyle] = "{ backgroundColor: getColor() }" 
+    [ngClass] = "{ 'online-status': serverStatus === 'online' }"> 
+    {{ 'Server' }} is {{ getServerStatus() }} (ngClass)
+</p> 

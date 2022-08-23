@@ -1,0 +1,76 @@
+<hr>
+
+<h2> Homework 2 </h2>
+
+<label> Username </label>
+
+<input type = "text" [(ngModel)] = "username"> 
+
+<p> The current username is: {{ username }} </p>
+
+<button class = "btn btn-primary" [disabled] = "username === ''" (click) = "resetUsername()"> 
+    Reset username 
+</button>
+
+<hr>
+
+<h2> Homework 3 </h2>
+
+<button class = "btn btn-primary" (click) = "toggleDisplay()"> Display Details </button>
+
+<p *ngIf = "paragraphDisplay"> Here we have some random text </p>
+
+<p *ngFor = "let element of buttonClicksArray"
+    [ngStyle] = "{ backgroundColor: getBackgroundColor(element) }"
+    [ngClass] = "{ colored: getColored(element) }"> 
+    The current number of clicks is {{ element }} 
+</p>
+
+<hr>
+
+<button class = "btn btn-primary" (click) = "onToggle()"> Display logs </button>
+
+<p *ngFor = "let logItem of logs"
+    [ngStyle] = "{ backgroundColor: logItem >= 5 ? 'blue' : 'white' }"
+    [ngClass] = "{ colored: logItem >= 5 }"> 
+    Hello: {{ logItem }} 
+</p>
+
+<!-- Get the index from ngFor <=> ; let varName = index -->
+<p *ngFor = "let logItem of logsTime; let logIndex = index"
+    [ngStyle] = "{ backgroundColor: logIndex >= 4 ? 'blue' : 'white' }"
+    [ngClass] = "{ colored: logIndex >= 4 }"> 
+    Hello: {{ logItem }} 
+</p>
+
+<hr>
+
+<h2> Homework 4 </h2>
+
+<app-game-control (startEvent) = "onGameStarted($event)">
+    <app-even *ngFor = "let evenNumber of evenNumbers"> 
+        {{ evenNumber }} 
+    </app-even>
+</app-game-control>
+
+<app-odd *ngFor = "let oddNumber of oddNumbers" [lastNumber] = "oddNumber"></app-odd>
+
+<h2> Homework 5 </h2>
+
+<div class = "container">
+    <div class = "row">
+        <div class = "col-xs-12 col-md-8 col-md-offset-2">
+            <app-active-users></app-active-users>
+
+            <app-inactive-users></app-inactive-users>
+
+            <p> 
+                The number of active -> inactive switches is: {{ inactiveSwitch }} 
+            </p>
+
+            <p> 
+                The number of inactive -> active switches is: {{ activeSwitch }} 
+            </p>
+        </div>
+    </div>
+</div>
