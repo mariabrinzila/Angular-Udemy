@@ -1,0 +1,35 @@
+<div class = "row">
+  <div class = "col-xs-12 col-sm-4">
+    <div class = "list-group">
+      <!-- queryParams <=> a bindable property of the routerLink directive which is used for adding query parameters -->
+      <!-- fragment <=> a bindable property of the routerLink directive which is used for adding fragments -->
+      <!-- fragment = "stringName" or [fragment] = "'stringName'" --> 
+      <a [routerLink] = "['/other-servers', server.id]" 
+        [queryParams] = "{ allowEdit: server.id === 3 ? '1' : '0' }" fragment = "loading" 
+        href = "#"  class = "list-group-item" *ngFor = "let server of servers">
+        {{ server.name }}
+      </a>
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-sm-4">
+    <!-- If we just put "other-servers" in the routerLink, we will get an error that the path /servers/servers isn't found (as it's a relative path, just like "./other-servers") -->
+    <!-- A relative path always appends the specified path to the current path which depends on the component you're currently on (for example it appends \other-servers to http://localhost:4200/other-servers) -->
+    <!-- "/other-servers" is an absolute path -->
+    <!-- "../other-servers" goes up a level (it removes the currently loaded segment path) and then appends this given path to the current path so it would append it to http://localhost:4200 -->
+    <!-- There can be added multiple ../ (it'll go up as many levels as ../ are) -->
+    <a routerLink = "../other-servers"> Reload Page </a>
+
+    <button class = "btn btn-primary" (click) = "onReload()"> 
+      Reload Page Programatically 
+    </button>
+
+    <router-outlet></router-outlet>
+
+    <!--<app-edit-server></app-edit-server>
+
+    <hr>
+
+    <app-other-server></app-other-server> -->
+  </div>
+</div>
