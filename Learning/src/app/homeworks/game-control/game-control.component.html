@@ -1,0 +1,11 @@
+<div class = "row">
+    <div class = "col-xs-12 btn-toolbar">
+        <button class = "btn btn-primary" #start (click) = "onStart()">
+            Start Game
+        </button>
+
+        <button class = "btn btn-danger" (click) = "onPause()">Pause Game</button>
+
+        <ng-content></ng-content>
+    </div>
+</div>

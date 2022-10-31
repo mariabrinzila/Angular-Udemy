@@ -1,0 +1,25 @@
+<div class = "row">
+    <div class = "col-xs-12 btn-toolbar">
+        <p>Add new Servers or blueprints!</p>
+
+        <label>Server Name</label>
+        
+        <!-- Local reference (#referenceName) <=> can be placed on any HTML element and it will hold a reference to that element -->
+        <!-- Local references can be used anywhere in the template (HTML file) but only there (not in the TypeScript etc.) -->
+        <input type = "text" class = "form-control" #serverNameInput>
+
+        <label>Server Content</label>
+
+        <input type = "text" class = "form-control" #serverContentInput>
+
+        <br>
+
+        <button class = "btn btn-primary" (click) = "onAddServer(serverNameInput)">
+            Add Server
+        </button>
+      
+        <button class = "btn btn-primary" (click) = "onAddBlueprint(serverNameInput)">
+            Add Server Blueprint
+        </button>
+    </div>
+</div>
