@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -20,12 +21,39 @@ export class ReactiveFormComponent implements OnInit {
     this.signUpForm = new FormGroup({
       'userData': new FormGroup({
         'username': new FormControl(null, [Validators.required, this.forbiddenNames.bind(this)]),
-        'email': new FormControl(null, [Validators.required, Validators.email])
+        'email': new FormControl(null, [Validators.required, Validators.email], this.forbiddenEmails)
       }),
       /*'username': new FormControl(null, Validators.required),
       'email': new FormControl(null, [Validators.required, Validators.email]),*/
       'gender': new FormControl('female'),
       'hobbies': new FormArray([])
+    });
+
+    this.signUpForm.valueChanges.subscribe(
+      (value) => {
+        console.log(value);
+      }
+    );
+
+    this.signUpForm.statusChanges.subscribe(
+      (status) => {
+        console.log('Status change: ' + status);
+      }
+    );
+
+    this.signUpForm.setValue({
+      'userData': {
+        'username': 'Maria',
+        'email': 'maria.brinzila@gmail.com'
+      },
+      'gender': 'female',
+      'hobbies': []
+    });
+
+    this.signUpForm.patchValue({
+      'userData': {
+        'username': 'MariaBrinzila'
+      }
     });
   }
 
@@ -46,7 +74,7 @@ export class ReactiveFormComponent implements OnInit {
   }
 
 
-  forbiddenNames(control: FormControl): {[s: string]: boolean} {
+  forbiddenNames(control: FormControl): { [s: string]: boolean } {
     // this.forbiddenUsernames won't work unless we bind this to the function when we use it in the form control
     if (this.forbiddenUsernames.indexOf(control.value) !== -1)
       return { 'forbiddenName': true };
@@ -55,7 +83,24 @@ export class ReactiveFormComponent implements OnInit {
   }
 
 
+  forbiddenEmails(control: FormControl): Promise<any> | Observable<any> {
+    // Asynchronous validator
+    const promise = new Promise<any>((resolve, reject) => {
+      setTimeout(() => {
+        if (control.value === 'test@gmail.com')
+          resolve({ 'forbiddenEmail': true })
+        else
+          resolve(null);
+      }, 1500);
+    });
+
+    return promise;
+  }
+
+
   onSubmit() {
     console.log(this.signUpForm);
+    
+    this.signUpForm.reset();
   }
 }
