@@ -23,7 +23,6 @@ export class ActiveUsersComponent implements OnInit {
 
   onSetToInactive(id: number) {
     this.usersService.setToInactive(id);
-    
     // this.counterService.inactiveSwitchIncrement();
   }
 }

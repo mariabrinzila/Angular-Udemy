@@ -84,8 +84,8 @@ export class HomeworksComponent implements DoCheck, OnInit {
 
     toggleDisplay() {
         this.paragraphDisplay = !this.paragraphDisplay;
-        
         this.currentNumber++;
+
         this.buttonClicksArray.push(this.currentNumber);
     }
 

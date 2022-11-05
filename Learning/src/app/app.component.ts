@@ -20,16 +20,14 @@ import { OtherUserService } from './other-user.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'Maria';
-
   serverElements = [{
     type: 'server',
     name: 'Testing',
     content: 'La la la test'
   }];
-
   accounts: { name: string, status: string }[] = [];
-
   activated = false;
+  
   private activatedSubscription: Subscription;
 
   // Angular's injector is hierarchal <=> if a service is provided for a component, Angular will provide it and make an instance of it for that component and all its child components and so on (the same instance for all of them)

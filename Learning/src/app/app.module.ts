@@ -50,6 +50,7 @@ import { OtherServerResolver } from './other-servers/other-server/other-server-r
 
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormComponent } from './reactive-form/reactive-form.component';
+import { PipesComponent } from './pipes/pipes.component';
 
 
 @NgModule({
@@ -85,7 +86,8 @@ import { ReactiveFormComponent } from './reactive-form/reactive-form.component';
     OtherUserComponent,
     OtherHomeComponent,
     TdFormComponent,
-    ReactiveFormComponent
+    ReactiveFormComponent,
+    PipesComponent
   ],
   imports: [
     BrowserModule,

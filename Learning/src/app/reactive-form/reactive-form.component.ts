@@ -34,13 +34,11 @@ export class ReactiveFormComponent implements OnInit {
         console.log(value);
       }
     );
-
     this.signUpForm.statusChanges.subscribe(
       (status) => {
         console.log('Status change: ' + status);
       }
     );
-
     this.signUpForm.setValue({
       'userData': {
         'username': 'Maria',
@@ -49,7 +47,6 @@ export class ReactiveFormComponent implements OnInit {
       'gender': 'female',
       'hobbies': []
     });
-
     this.signUpForm.patchValue({
       'userData': {
         'username': 'MariaBrinzila'
@@ -60,6 +57,7 @@ export class ReactiveFormComponent implements OnInit {
 
   onAddHobby() {
     const control = new FormControl(null, Validators.required);
+
     (<FormArray>this.signUpForm.get('hobbies')).push(control);
   }
 
@@ -100,7 +98,6 @@ export class ReactiveFormComponent implements OnInit {
 
   onSubmit() {
     console.log(this.signUpForm);
-    
     this.signUpForm.reset();
   }
 }

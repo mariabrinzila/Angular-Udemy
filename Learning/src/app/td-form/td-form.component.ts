@@ -44,7 +44,6 @@ export class TdFormComponent implements OnInit {
       questionAnswer: '',
       gender: 'male'
     }); */
-
     this.signupForm.form.patchValue({
       userData: {
         username: suggestedName

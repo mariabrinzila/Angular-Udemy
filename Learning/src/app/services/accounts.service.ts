@@ -34,7 +34,6 @@ export class AccountsService {
             name: name,
             status: status
         });
-
         this.loggingService.logStatusChange(status);
     }
 

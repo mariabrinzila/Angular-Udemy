@@ -20,10 +20,8 @@ export class EditServerComponent implements OnInit, CanComponentDeactivate {
     name: string, 
     status: string
   };
-
   serverName = '';
   serverStatus = '';
-
   allowEdit = false;
   changesSaved = false;
 
@@ -34,7 +32,9 @@ export class EditServerComponent implements OnInit, CanComponentDeactivate {
 
   ngOnInit() {
     const id = +this.route.snapshot.params['id'];
+
     this.server = this.serversService.getServer(id);
+    
     this.serverName = this.server.name;
     this.serverStatus = this.server.status;
 
