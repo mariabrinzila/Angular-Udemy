@@ -1,0 +1,210 @@
+<div class = "container">
+    <div class = "row">
+        <div class = "col-xs-12">
+            <h2>Components and databinding</h2>
+
+            <input type = "text" [(ngModel)] = "title">
+
+            <p>{{ title }}</p>
+
+            <h3>I'm in the AppComponent!</h3>
+
+            <!-- hr is for a horizontal line -->
+            <hr> 
+
+            <app-servers></app-servers>
+
+            <hr>
+
+            <h2>Assignment 1</h2>
+
+            <app-warning-alert></app-warning-alert>
+
+            <app-success-alert></app-success-alert>
+
+            <app-homeworks></app-homeworks>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<div class = "container">
+    <h2>Custom properties and events</h2>
+
+    <app-cockpit (serverCreated) = "onServerAdded($event)" 
+        (blueprint) = "onBlueprintAdded($event)">
+    </app-cockpit>
+
+    <hr>
+
+    <div class = "row">
+        <div class = "col-xs-12 btn-toolbar">
+            <button class = "btn btn-primary" (click) = "onChangesFirst()">
+                Changes First Element
+            </button>
+
+            <button class = "btn btn-danger" (click) = "onDestroyFirst()">
+                Destroy First Component
+            </button>
+
+            <hr>
+            
+            <!-- EVerything between your opening and closing tags (for example between <app-server-element> and </app-server-element>) is lost by default -->
+            <app-server-element *ngFor = "let serverElement of serverElements" 
+                [serverElement] = "serverElement" [name] = "serverElement.name">
+                <p #contentParagraph>
+                    <strong *ngIf = "serverElement.type === 'server'" 
+                        style = "color: red">
+                        {{ serverElement.content }}
+                    </strong>
+                            
+                    <em *ngIf = "serverElement.type === 'blueprint'">
+                        {{ serverElement.content }}
+                    </em>
+                </p>
+            </app-server-element>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<div class = "container">
+    <div class = "row">
+        <h2>Directives</h2>
+
+        <app-odd-numbers></app-odd-numbers>
+    </div>
+</div>
+
+<hr>
+
+<div class = "container">
+    <div class = "row">
+        <h2>Services and dependency injection</h2>
+
+        <br><br>
+
+        <div class = "col-xs-12 col-md-8 col-md-offset-2">
+            <app-new-account></app-new-account>
+
+            <hr>
+
+            <app-account *ngFor = "let acc of accounts; let i = index"
+                [account] = "acc" [id] = "i">
+            </app-account>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<div class = "container">
+    <div class = "row">
+        <h2>Routing</h2>
+
+        <br><br>
+
+        <div class = "col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+            <ul class = "nav nav-tabs">
+                <!-- If we were to put <a href = "/" ..., it would reload the app (because with every click, a new request is sent to the server and it returns a new page) so it would restart the app on every navigation -->
+                <!-- routerLink <=> a directive to not send a new request and look for a route that matches the given one -->
+                <!-- routerLink = "/" <=> passes the route correctly but it handles clicks differently -->
+                <!-- [routerLink] = "['el1', 'el2']" <=> property binding and we have to give the elements of the path (for example el1 = /users, el2 = something) -->
+                
+                <!-- routerLinkActive <=> a directive to add a specified class (a string between "") and which can be added to a wrapping (for example div), or to the link itself -->
+                <!-- routerLinkActive attaches the specified class when the current path matches (for example / is always in the current path so Home will always be active) -->
+                <!-- routerLinkActiveOptions is a special configuration and it's added on the same element routerLinkActive is added on -->
+                <!-- exact: true <=> matches the whole path, not just part of the path -->
+                <li role = "presentation" routerLinkActive = "active"
+                    [routerLinkActiveOptions] = "{ exact: true }">
+                    <a routerLink = "/">Home</a>
+                </li>
+
+                <li role = "presentation" routerLinkActive = "active">
+                    <a routerLink = "other-servers">Servers</a>
+                </li>
+
+                <li role = "presentation" routerLinkActive = "active">
+                    <a [routerLink] = "['/users']">Users</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class = "row">
+        <div class = "col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+            <!-- router-outlet <=> a directive which marks the place where we want Angular to load the component according to the route -->
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div> 
+
+<hr>
+
+<div class = "container">
+    <div class = "row">
+        <h2>Observables</h2>
+
+        <br><br>
+
+        <div class = "col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+            <a routerLink = "/observables">Home</a> | 
+            
+            <a [routerLink] = "['user-observables', 1]">
+                User 1
+            </a> |
+
+            <a [routerLink] = "['user-observables', 2]">
+                User 2
+            </a>
+        </div>
+    </div>
+
+    <hr/>
+
+    <p *ngIf = "activated">Activated</p>
+
+    <hr/>
+
+    <div class = "row">
+        <div class = "col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<div class = "container">
+    <div class = "row">
+        <h2>Template-Driven Forms</h2>
+
+        <br><br>
+    </div>
+</div>
+
+<app-td-form></app-td-form>
+
+<div class = "container">
+    <div class = "row">
+        <h2>Reactive Forms</h2>
+
+        <br><br>
+    </div>
+</div>
+
+<app-reactive-form></app-reactive-form>
+
+<hr>
+
+<div class = "container">
+    <div class = "row">
+        <h2>Pipes</h2>
+    </div>
+</div>
+
+<app-pipes></app-pipes>
+
+<hr>

@@ -1,0 +1,259 @@
+<hr>
+
+<h2>Assignment 2</h2>
+
+<label>Username</label>
+
+<input type = "text" [(ngModel)] = "username"> 
+
+<p>The current username is: {{ username }}</p>
+
+<button class = "btn btn-primary" [disabled] = "username === ''" (click) = "resetUsername()">
+    Reset username
+</button>
+
+<hr>
+
+<h2>Assignment 3</h2>
+
+<button class = "btn btn-primary" (click) = "toggleDisplay()">Display Details</button>
+
+<p *ngIf = "paragraphDisplay">Here we have some random text</p>
+
+<p *ngFor = "let element of buttonClicksArray"
+    [ngStyle] = "{ backgroundColor: getBackgroundColor(element) }"
+    [ngClass] = "{ colored: getColored(element) }">
+    The current number of clicks is {{ element }}
+</p>
+
+<hr>
+
+<button class = "btn btn-primary" (click) = "onToggle()">Display logs</button>
+
+<p *ngFor = "let logItem of logs"
+    [ngStyle] = "{ backgroundColor: logItem >= 5 ? 'blue' : 'white' }"
+    [ngClass] = "{ colored: logItem >= 5 }">
+    Hello: {{ logItem }}
+</p>
+
+<!-- Get the index from ngFor <=> ; let varName = index -->
+<p *ngFor = "let logItem of logsTime; let logIndex = index"
+    [ngStyle] = "{ backgroundColor: logIndex >= 4 ? 'blue' : 'white' }"
+    [ngClass] = "{ colored: logIndex >= 4 }">
+    Hello: {{ logItem }}
+</p>
+
+<hr>
+
+<h2>Assignment 4</h2>
+
+<app-game-control (startEvent) = "onGameStarted($event)">
+    <app-even *ngFor = "let evenNumber of evenNumbers">{{ evenNumber }}</app-even>
+</app-game-control>
+
+<app-odd *ngFor = "let oddNumber of oddNumbers" [lastNumber] = "oddNumber"></app-odd>
+
+<hr>
+
+<h2>Assignment 5</h2>
+
+<div class = "container">
+    <div class = "row">
+        <div class = "col-xs-12 col-md-8 col-md-offset-2">
+            <app-active-users></app-active-users>
+
+            <app-inactive-users></app-inactive-users>
+
+            <p>The number of active -> inactive switches is: {{ inactiveSwitch }}</p>
+
+            <p>The number of inactive -> active switches is: {{ activeSwitch }}</p>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>Assignment 6</h2>
+
+<div class = "container">
+    <div class = "row">
+        <div class = "col-xs-12 col-md-8 col-md-offset-2">
+            <form #f = "ngForm" (ngSubmit) = "onSubmit()">
+                <div class = "form-group">
+                    <label for = "email">Email Address</label>
+
+                    <input type = "text" id = "email" class = "form-control" 
+                        [ngModel] = "'example@yahoo.com'" name = "email" 
+                        required email #email = "ngModel">
+
+                    <span class = "help-block" *ngIf = "!email.valid && email.touched">
+                        The email is invalid! Try again!</span>
+                </div>
+
+                <div class = "form-group">
+                    <label for = "subscription">Choose A Subscription</label>
+
+                    <select name = "subscription" id = "subscription" 
+                        [ngModel] = "defaultValue" class = "form-control">
+                        <!-- <option value = "Basic">Basic</option>
+
+                        <option value = "Advanced">Advanced</option>
+
+                        <option value = "Pro">Pro</option> -->
+
+                        <option *ngFor = "let subscription of subscriptions" 
+                            [value] = "subscription">
+                            {{ subscription }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class = "form-group">
+                    <label for = "password">Password</label>
+
+                    <input type = "password" id = "password" class = "form-control" 
+                        ngModel name = "password" required #password = "ngModel">
+
+                    <span class = "help-block" *ngIf = "!password.valid && password.touched">
+                        The password is invalid! Try again!
+                    </span>
+                </div>
+
+                <button class = "btn btn-primary" type = "submit" [disabled] = "!f.valid">
+                    Submit
+                </button>
+
+                <span class = "help-block" *ngIf = "!f.valid && f.touched">
+                    The form is invalid! Please enter valid information
+                </span>
+            </form>
+
+            <div class = "row" *ngIf = "submitted">
+                <div class = "col-xs-12">
+                    <h3>Your Submitted Data is:</h3>
+        
+                    <p>Email: {{ submittedData.email }}</p>
+        
+                    <p>Password: {{ submittedData.password }}</p>
+        
+                    <p>Subscription: {{ submittedData.subscription }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>Assignment 7</h2>
+
+<div class = "container">
+    <div class = "row">
+        <div class = "col-xs-12 col-md-8 col-md-offset-2">
+            <form [formGroup] = "projectForm" (ngSubmit) = "onSubmitProject()">
+                <div class = "form-group">
+                    <label for = "name">Project Name</label>
+
+                    <input type = "text" id = "name" class = "form-control" 
+                        formControlName = "name">
+
+                    <span class = "help-block" 
+                        *ngIf = "!projectForm.get('name').valid && projectForm.get('name').touched">
+                        <span *ngIf = "projectForm.get('name').errors?.required">
+                            The project name should NOT be empty!
+                        </span>
+
+                        <span *ngIf = "projectForm.get('name').errors?.forbiddenProjectName">
+                            The project name should NOT be Test!
+                        </span>
+
+                        <span *ngIf = "projectForm.get('name').errors?.forbiddenProjectNameAsync">
+                            The project name should NOT be TestAsync!
+                        </span>
+                    </span>
+                </div>
+
+                <div class = "form-group">
+                    <label for = "email">Email</label>
+
+                    <input type = "email" id = "email" class = "form-control"
+                        formControlName = "email">
+
+                    <span class = "help-block" 
+                        *ngIf = "!projectForm.get('email').valid && projectForm.get('email').touched">
+                        <span *ngIf = "projectForm.get('email').errors['required']">
+                            The email should NOT be empty!
+                        </span>
+
+                        <span *ngIf = "projectForm.get('email').errors['email']">
+                            The email should be a valid email address!
+                        </span>
+                    </span>
+                </div>
+
+                <div class = "form-group">
+                    <label for = "status">Project Status</label>
+
+                    <select id = "status" class = "form-control" formControlName = "status">
+                        <option *ngFor = "let status of projectStatus" 
+                            [value] = "status">
+                            {{ status }}
+                        </option>
+                    </select>
+                </div>
+
+                <button class = "btn btn-primary" type = "submit" [disabled] = "!projectForm.valid">
+                    Submit Project Information
+                </button>
+            </form>
+
+            <div class = "row" *ngIf = "projectSubmitted">
+                <div class = "col-xs-12">
+                    <h3>Your Project Information is:</h3>
+        
+                    <p>Project Name: {{ projectInformation.name }}</p>
+        
+                    <p>Email: {{ projectInformation.email }}</p>
+        
+                    <p>Project Status: {{ projectInformation.status }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>Assignment 8</h2>
+
+<div class = "container">
+    <div class = "row">
+        <div class = "col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+            <input type = "text" [(ngModel)] = "filteredStatus">
+
+            <br><br>
+
+            <button class = "btn btn-primary" (click) = "onAddServer()">Add Server</button>
+
+            <!--
+                Sort pipe that sorts the list by the name of the instance
+            -->
+
+            <hr>
+
+            <ul class = "list-group">
+                <li class = "list-group-item" 
+                    *ngFor = "let server of servers | filter:filteredStatus:'status' | sort"
+                    [ngClass] = "getStatusClasses(server)">
+                    <span class = "badge">{{ server.status }}</span>
+
+                    <strong>{{ server.name | shorten: 15 }}</strong> |
+
+                    {{ server.instanceType | uppercase | reverse }} | 
+                    
+                    {{ server.started | date: 'fullDate' | uppercase }}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>  

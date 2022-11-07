@@ -1,0 +1,64 @@
+<div class = "container">
+    <div class = "row">
+        <div class = "col-xs-12">
+            <button class = "btn btn-primary" (click) = "onlyOdd = !onlyOdd">
+                Only show odd numbers
+            </button>
+
+            <br><br>
+
+            <ul class = "list-group">
+                <!-- We can't have more than one structural directives on the same element -->
+                <div *ngIf = "onlyOdd">
+                    <li class = "list-group-item" *ngFor = "let odd of oddNumbers"
+                        [ngClass] = "{ odd: odd % 2 !== 0 }"
+                        [ngStyle] = "{ backgroundColor: odd % 2 !== 0 ? 'yellow' : 'transparent' }">
+                        {{ odd }}
+                    </li>
+                </div>
+
+                <!-- Structural directives with the * are transformed to this: -->
+                <ng-template [ngIf] = "!onlyOdd">
+                    <div>
+                        <li class = "list-group-item" *ngFor = "let even of evenNumbers"
+                            [ngClass] = "{ odd: even % 2 !== 0 }"
+                            [ngStyle] = "{ backgroundColor: even % 2 !== 0 ? 'yellow' : 'transparent' }">
+                            {{ even }}
+                        </li>
+                    </div>
+                </ng-template>
+                
+                <div *appUnless = "onlyOdd">
+                    <li class = "list-group-item" *ngFor = "let even of evenNumbers"
+                        [ngClass] = "{ odd: even % 2 !== 0 }"
+                        [ngStyle] = "{ backgroundColor: even % 2 !== 0 ? 'yellow' : 'transparent' }">
+                        {{ even }}
+                    </li>
+                </div>
+            </ul>
+
+            <p appBasicHighlight>Style me with the basic highlight directive</p>
+
+            <p appBetterHighlight>Style me with the better highlight directive</p>
+
+            <!-- <p appEvenBetterHighlight [defaultColor] = "'yellow'" [highlightColor] = "'red'"> 
+                Style me with the even better highlight directive (different colors) 
+            </p> (when there is no alias for any directive property that matches the directive name)
+            --> 
+            
+            <!-- A directive property has the alias the directive name <=> [directiveName] = "propertyValue" -->
+            <!-- If for a property you pass a string ([propertyName] = "'string'" usually), you can also write it as propertyName = "string" -->
+            <p [appEvenBetterHighlight] = "'red'" defaultColor = "yellow">
+                Style me with the even better highlight directive (different colors)
+            </p>
+            
+            <!-- ngSwitch <=> structural directive with a different syntax -->
+            <div [ngSwitch] = "value">
+                <p *ngSwitchCase = "5">Value is 5</p>
+                <p *ngSwitchCase = "10">Value is 10</p>
+                <p *ngSwitchCase = "100">Value is 100</p>
+                <p *ngSwitchDefault>Value is Default</p> 
+            </div>
+        </div>
+    </div>
+</div>
