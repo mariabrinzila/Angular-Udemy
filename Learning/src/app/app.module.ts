@@ -32,6 +32,8 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { OtherUserComponent } from './other-user/other-user.component';
 import { OtherHomeComponent } from './other-home/other-home.component';
 import { TdFormComponent } from './td-form/td-form.component';
+import { ReactiveFormComponent } from './reactive-form/reactive-form.component';
+import { PipesComponent } from './pipes/pipes.component';
 
 import { BasicHighlightDirective } from './basic-highlight/basic-highlight.directive';
 import { BetterHighlightDirective } from './better-highlight/better-highlight.directive';
@@ -49,8 +51,11 @@ import { CanDeactivateGuard } from './other-servers/edit-server/can-deactivate-g
 import { OtherServerResolver } from './other-servers/other-server/other-server-resolver.service';
 
 import { AppRoutingModule } from './app-routing.module';
-import { ReactiveFormComponent } from './reactive-form/reactive-form.component';
-import { PipesComponent } from './pipes/pipes.component';
+
+import { ShortenPipe } from './shorten.pipe';
+import { FilterPipe } from './filter.pipe';
+import { ReversePipe } from './reverse.pipe';
+import { SortPipe } from './sort.pipe';
 
 
 @NgModule({
@@ -87,7 +92,11 @@ import { PipesComponent } from './pipes/pipes.component';
     OtherHomeComponent,
     TdFormComponent,
     ReactiveFormComponent,
-    PipesComponent
+    PipesComponent,
+    ShortenPipe,
+    FilterPipe,
+    ReversePipe,
+    SortPipe
   ],
   imports: [
     BrowserModule,
