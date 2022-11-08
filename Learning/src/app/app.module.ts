@@ -5,6 +5,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { HttpClientModule } from '@angular/common/http';
+
 import { AppComponent } from './app.component';
 import { ServerComponent } from './server/server.component';
 import { ServersComponent } from './servers/servers.component';
@@ -34,6 +36,7 @@ import { OtherHomeComponent } from './other-home/other-home.component';
 import { TdFormComponent } from './td-form/td-form.component';
 import { ReactiveFormComponent } from './reactive-form/reactive-form.component';
 import { PipesComponent } from './pipes/pipes.component';
+import { HttpComponent } from './http/http.component';
 
 import { BasicHighlightDirective } from './basic-highlight/basic-highlight.directive';
 import { BetterHighlightDirective } from './better-highlight/better-highlight.directive';
@@ -96,12 +99,14 @@ import { SortPipe } from './sort.pipe';
     ShortenPipe,
     FilterPipe,
     ReversePipe,
-    SortPipe
+    SortPipe,
+    HttpComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     AppRoutingModule
     // RouterModule.forRoot(appRoutes)
   ],
