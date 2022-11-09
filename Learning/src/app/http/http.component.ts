@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 
 import { map } from 'rxjs';
 
+import { Post } from '../post.model';
+
 
 @Component({
   selector: 'app-http',
@@ -11,7 +13,8 @@ import { map } from 'rxjs';
   styleUrls: ['./http.component.css']
 })
 export class HttpComponent implements OnInit {
-  loadedPosts = [];
+  loadedPosts: Post[] = [];
+  isFetching = false;
 
   constructor(private http: HttpClient) {}
 
@@ -21,9 +24,9 @@ export class HttpComponent implements OnInit {
   }
 
 
-  onCreatePost(postData: { title: string; content: string }) {
+  onCreatePost(postData: Post) {
     // POST HTTP request
-    this.http.post(
+    this.http.post<{ name: string }>(
       'https://angular-udemy-b02da-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
       postData
     ).subscribe(
@@ -45,14 +48,16 @@ export class HttpComponent implements OnInit {
 
 
   private fetchPosts() {
+    this.isFetching = true;
+
     // GET HTTP request
-    this.http.get(
+    this.http.get<{ [key: string]: Post }>(
       'https://angular-udemy-b02da-default-rtdb.europe-west1.firebasedatabase.app/posts.json'
     ).pipe(
       // Transform our data to an array of JavaScript objects 
       map(
         responseData => {
-          const postsArray = [];
+          const postsArray: Post[] = [];
 
           for (const key in responseData)
             if (responseData.hasOwnProperty(key))
@@ -64,7 +69,8 @@ export class HttpComponent implements OnInit {
       )
     ).subscribe(
       posts => {
-        console.log(posts);
+        this.loadedPosts = posts;
+        this.isFetching = false;
       }
     );
   }
