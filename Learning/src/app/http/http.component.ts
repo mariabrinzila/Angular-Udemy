@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { HttpClient } from '@angular/common/http';
-
-import { map } from 'rxjs';
-
 import { Post } from '../post.model';
+
+import { PostsService } from '../posts.service';
 
 
 @Component({
@@ -15,62 +13,51 @@ import { Post } from '../post.model';
 export class HttpComponent implements OnInit {
   loadedPosts: Post[] = [];
   isFetching = false;
+  error = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private postsService: PostsService) {}
 
   
   ngOnInit() {
-    this.fetchPosts();
+    this.getPosts();
   }
 
 
-  onCreatePost(postData: Post) {
-    // POST HTTP request
-    this.http.post<{ name: string }>(
-      'https://angular-udemy-b02da-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
-      postData
-    ).subscribe(
-      responseData => {
-        console.log(responseData);
+  private getPosts() {
+    this.isFetching = true;
+
+    // Send GET HTTP request through the service
+    this.postsService.fetchPosts().subscribe(
+      posts => {
+        this.loadedPosts = posts;
+        this.isFetching = false;
+      },
+      error => {
+        this.error = error.message;
+
+        console.log(error);
       }
     );
   }
 
 
+  onCreatePost(postData: Post) {
+    // Send POST HTTP request through the service
+    this.postsService.createAndStorePost(postData.title, postData.content);
+  }
+
+
   onFetchPosts() {
-    this.fetchPosts();
+    this.getPosts();
   }
 
 
   onClearPosts() {
-    // HTTP request
-  }
-
-
-  private fetchPosts() {
-    this.isFetching = true;
-
-    // GET HTTP request
-    this.http.get<{ [key: string]: Post }>(
-      'https://angular-udemy-b02da-default-rtdb.europe-west1.firebasedatabase.app/posts.json'
-    ).pipe(
-      // Transform our data to an array of JavaScript objects 
-      map(
-        responseData => {
-          const postsArray: Post[] = [];
-
-          for (const key in responseData)
-            if (responseData.hasOwnProperty(key))
-              // Use the ... operator to make a new JavaScript object where we also store the key as the id
-              postsArray.push({ ...responseData[key], id: key });
-
-          return postsArray;
-        }
-      )
-    ).subscribe(
-      posts => {
-        this.loadedPosts = posts;
-        this.isFetching = false;
+    // Send DELETE HTTP request through the service
+    this.postsService.deletePosts().subscribe(
+      () => {
+        // Clear loaded posts array
+        this.loadedPosts = [];
       }
     );
   }
