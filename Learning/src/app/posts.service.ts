@@ -1,16 +1,18 @@
 import { Injectable } from "@angular/core";
 
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams, HttpEventType } from "@angular/common/http";
 
 import { Post } from "./post.model";
 
-import { map } from 'rxjs';
+import { map, catchError, throwError, Subject, tap } from 'rxjs';
 
 
 @Injectable({
     providedIn: 'root'
 })
 export class PostsService {
+    error = new Subject<string>();
+
     constructor(private http: HttpClient) {}
 
     
@@ -23,19 +25,35 @@ export class PostsService {
         // Send POST HTTP request
         this.http.post<{ name: string }>(
             'https://angular-udemy-b02da-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
-            postData
+            postData,
+            {
+                observe: 'response'
+            }
         ).subscribe(
             responseData => {
                 console.log(responseData);
+            },
+            error => {
+                this.error.next(error);
             }
         );
     }
 
 
     fetchPosts() {
+        let searchParams = new HttpParams();
+
+        // searchParams is immutable
+        searchParams = searchParams.append('print', 'pretty');
+        searchParams = searchParams.append('custom', 'key');
+
         // Send GET HTTP request
         return this.http.get<{ [key: string]: Post }>(
-            'https://angular-udemy-b02da-default-rtdb.europe-west1.firebasedatabase.app/posts.json'
+            'https://angular-udemy-b02da-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
+            {
+                headers: new HttpHeaders({ 'Custom-header': 'Hello' }),
+                params: searchParams // new HttpParams().set('print', 'pretty')
+            }
         ).pipe(
             // Transform our data to an array of JavaScript objects 
             map(
@@ -49,6 +67,13 @@ export class PostsService {
       
                     return postsArray;
                 }
+            ),
+            catchError(
+                errorResponse => {
+                    // Send to analytics server etc.
+                    // return throwError(errorMessage);
+                    return throwError(() => errorResponse);
+                }
             )
         );
     }
@@ -57,7 +82,17 @@ export class PostsService {
     deletePosts() {
         // Send DELETE HTTP request
         return this.http.delete(
-            'https://angular-udemy-b02da-default-rtdb.europe-west1.firebasedatabase.app/posts.json'
+            'https://angular-udemy-b02da-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
+            {
+                observe: 'events'
+            }
+        ).pipe(
+            tap(event => {
+                console.log(event);
+
+                if (event.type === HttpEventType.Response)
+                    console.log(event.body);
+            })
         );
     }
 }
