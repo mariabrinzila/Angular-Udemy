@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { ServerComponent } from './server/server.component';
@@ -59,6 +59,9 @@ import { ShortenPipe } from './shorten.pipe';
 import { FilterPipe } from './filter.pipe';
 import { ReversePipe } from './reverse.pipe';
 import { SortPipe } from './sort.pipe';
+
+import { AuthInterceptorService } from './auth-interceptor.service';
+import { LoggingInterceptorService } from './logging-interceptor.service';
 
 
 @NgModule({
@@ -118,7 +121,17 @@ import { SortPipe } from './sort.pipe';
     AuthService, 
     AuthGuard,
     CanDeactivateGuard,
-    OtherServerResolver
+    OtherServerResolver,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoggingInterceptorService,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

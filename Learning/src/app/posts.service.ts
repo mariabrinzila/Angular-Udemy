@@ -52,7 +52,8 @@ export class PostsService {
             'https://angular-udemy-b02da-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
             {
                 headers: new HttpHeaders({ 'Custom-header': 'Hello' }),
-                params: searchParams // new HttpParams().set('print', 'pretty')
+                params: searchParams, // new HttpParams().set('print', 'pretty')
+                responseType: 'json'
             }
         ).pipe(
             // Transform our data to an array of JavaScript objects 
@@ -84,15 +85,18 @@ export class PostsService {
         return this.http.delete(
             'https://angular-udemy-b02da-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
             {
-                observe: 'events'
+                observe: 'events',
+                responseType: 'text'
             }
         ).pipe(
-            tap(event => {
-                console.log(event);
+            tap(
+                event => {
+                    console.log(event);
 
-                if (event.type === HttpEventType.Response)
-                    console.log(event.body);
-            })
+                    if (event.type === HttpEventType.Response)
+                        console.log(event.body);
+                }
+            )
         );
     }
 }
