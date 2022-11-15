@@ -13,7 +13,7 @@ import { ShoppingListService } from "../shopping-list/shopping-list.service";
 export class RecipeService {
   recipesChanged = new Subject<Recipe[]>();
 
-  private recipes: Recipe[] = [
+  /* private recipes: Recipe[] = [
     new Recipe(
       'Tasty Schnitzel', 
       'A super tasty schnitzel - just awesome', 
@@ -32,7 +32,8 @@ export class RecipeService {
         new Ingredient('Meat', 1)
       ]
     )
-  ];
+  ]; */
+  private recipes: Recipe[] = [];
 
   constructor(private slService: ShoppingListService) {}
 
@@ -68,6 +69,13 @@ export class RecipeService {
 
   deleteRecipe(index: number) {
     this.recipes.splice(index, 1);
+    this.recipesChanged.next(this.recipes.slice());
+  }
+
+
+  setRecipes(recipes: Recipe[]) {
+    this.recipes = recipes;
+
     this.recipesChanged.next(this.recipes.slice());
   }
 }
