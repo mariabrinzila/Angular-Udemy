@@ -15,7 +15,7 @@ import { RecipesResolverService } from "./recipes/recipes-resolver.service";
 const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: '/recipes',
+        redirectTo: '/auth',
         pathMatch: 'full'
     },
     {

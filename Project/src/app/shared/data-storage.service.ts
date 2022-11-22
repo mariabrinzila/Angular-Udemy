@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
 
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 
+import { take, exhaustMap, map, tap } from "rxjs";
+
+import { AuthService } from "../auth/auth.service";
 import { RecipeService } from '../recipes/recipe.service';
 
 import { Recipe } from "../recipes/recipe.model";
-
-import { map, tap } from "rxjs";
 
 
 @Injectable({
@@ -16,7 +17,8 @@ import { map, tap } from "rxjs";
 })
 export class DataStorageService {
     constructor(private http: HttpClient,
-                private recipeService: RecipeService) {}
+                private recipeService: RecipeService,
+                private authService: AuthService) {}
 
 
     storeRecipes() {
@@ -36,7 +38,39 @@ export class DataStorageService {
 
 
     fetchRecipes() {
-        // Send a GET HTTP request for the recipes
+        /* return this.authService.user.pipe(
+            // Get the current user
+            take(1),
+            exhaustMap(
+                user => {
+                    // Send a GET HTTP request for the recipes
+                    return this.http.get<Recipe[]>(
+                        'https://apad-3532e-default-rtdb.europe-west1.firebasedatabase.app/recipes.json',
+                        {
+                            params: new HttpParams().set('auth', user.token)
+                        }
+                    )
+                }
+            ),
+            map(
+                recipes => {
+                    return recipes.map(
+                        recipe => {
+                            return { 
+                                ...recipe, 
+                                ingredients: recipe.ingredients ? recipe.ingredients : []
+                            };
+                        }
+                    );
+                }
+            ),
+            tap(
+                recipes => {
+                    this.recipeService.setRecipes(recipes);
+                }
+            )
+        ); */
+
         return this.http.get<Recipe[]>(
             'https://apad-3532e-default-rtdb.europe-west1.firebasedatabase.app/recipes.json'
         ).pipe(
