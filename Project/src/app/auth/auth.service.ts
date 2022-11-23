@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 
+import { Router } from "@angular/router";
+
 import { BehaviorSubject, catchError, throwError, tap } from "rxjs";
 
 import { User } from "./user.model";
@@ -24,8 +26,10 @@ export interface AuthResponseData {
 export class AuthService {
     user = new BehaviorSubject<User>(null);
     token: string = null;
+    private tokenExpirationTimer: any;
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient,
+                private router: Router) {}
 
 
     signUp(email: string, password: string) {
@@ -69,6 +73,64 @@ export class AuthService {
     }
 
 
+    autoLogin() {
+        const userData: {
+            id: string,
+            email: string,
+            _token: string,
+            _tokenExpirationDate: string
+        } = JSON.parse(localStorage.getItem('userData'));
+
+        // If there's no stored user data, we can't do anything (the user needs to sign in on its own)
+        if (!userData) 
+            return;
+
+        // Create a new User object with the fetched data
+        const loadedUser = new User(userData.id, userData.email, userData._token, 
+            new Date(userData._tokenExpirationDate));
+
+        // Check the token's validity using the getter
+        if (loadedUser.token) {
+            // Emit this user as the current user
+            this.user.next(loadedUser);
+
+            // Configure expiration duration (it's the current exipration date in milisecods - the current timestamp in miliseconds)
+            const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - 
+                new Date().getTime();
+            
+            // Configure auto logout
+            this.autoLogout(expirationDuration);
+        }
+    }
+
+
+    logout() {
+        this.user.next(null);
+        this.router.navigate(['/auth']);
+
+        // Clear the user's data from the local storage
+        localStorage.removeItem('userData');
+
+        // If we have an active timer, clear it
+        if (this.tokenExpirationTimer) 
+            clearTimeout(this.tokenExpirationTimer);
+
+        this.tokenExpirationTimer = null;
+    }
+
+
+    autoLogout(expirationDuration: number) {
+        // expirationDuration is the amount of miliseconds until a user's token becomes invalid
+        // Set a timer until expirationDuration after that time runs out, call the logout method 
+        this.tokenExpirationTimer = setTimeout(
+            () => {
+                this.logout();
+            }, 
+            expirationDuration
+        );
+    }
+
+
     private handleErrors(errorResponse: HttpErrorResponse) {
         let errorMessage = 'An unknown error occurred!';
         
@@ -104,8 +166,14 @@ export class AuthService {
         );
 
         // Generate the new user
-        const user = new User(email, id, token, expirationDate);
+        const user = new User(id, email, token, expirationDate);
 
         this.user.next(user);
+
+        // Configure auto logout
+        this.autoLogout(expiresIn * 1000);
+
+        // Persist user information by storing it in the local storage
+        localStorage.setItem('userData', JSON.stringify(user));
     }
 }

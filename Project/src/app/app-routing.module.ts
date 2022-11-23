@@ -11,16 +11,19 @@ import { AuthComponent } from "./auth/auth.component";
 
 import { RecipesResolverService } from "./recipes/recipes-resolver.service";
 
+import { AuthGuard } from "./auth/auth.guard";
+
 
 const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: '/auth',
+        redirectTo: '/recipes',
         pathMatch: 'full'
     },
     {
         path: 'recipes',
         component: RecipesComponent,
+        canActivate: [AuthGuard],
         children: [
             {
                 path: '',
