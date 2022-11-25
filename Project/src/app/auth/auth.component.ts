@@ -1,24 +1,31 @@
-import { Component, ComponentFactoryResolver } from "@angular/core";
+import { Component, ComponentFactoryResolver, ViewChild, OnDestroy } from "@angular/core";
 
 import { Router } from "@angular/router";
 
 import { NgForm } from "@angular/forms";
 
-import { Observable } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 
 import { AuthService, AuthResponseData } from "./auth.service";
 
 import { AlertComponent } from "../shared/alert/alert.component";
+
+import { PlaceholderDirective } from "../shared/placeholder/placeholder.directive";
 
 
 @Component({
     selector: 'app-auth',
     templateUrl: './auth.component.html'
 })
-export class AuthComponent {
+export class AuthComponent implements OnDestroy {
     isLoginMode = true;
     isLoading = false;
     error: string = null;
+
+    @ViewChild(PlaceholderDirective, { static: false })
+    alerHost: PlaceholderDirective;
+
+    private closeSub: Subscription;
 
     constructor(private authService: AuthService, 
                 private router: Router,
@@ -31,7 +38,31 @@ export class AuthComponent {
 
 
     private showErrorAlert(message: string) {
+        // Create a component factory with the type the component we want to render
         const alertComponentFactory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
+        
+        // Get access to the ViewContainerRef from the directive
+        const hostViewContainerRef = this.alerHost.viewContainerRef;
+
+        // Clear whatever was rendered before
+        hostViewContainerRef.clear();
+
+        // Create the component we want to render
+        const alertComponentRef = hostViewContainerRef.createComponent(alertComponentFactory);
+
+        // Data binding
+        alertComponentRef.instance.message = message;
+
+        //Event binding
+        this.closeSub = alertComponentRef.instance.close.subscribe(
+            () => {
+                // Unsubscribe
+                this.closeSub.unsubscribe();
+
+                // Clear component
+                hostViewContainerRef.clear();
+            }
+        );
     }
 
 
@@ -79,5 +110,11 @@ export class AuthComponent {
 
         // Reset form after the data has been submitted
         form.reset();
+    }
+
+
+    ngOnDestroy() {
+        if (this.closeSub)
+            this.closeSub.unsubscribe();
     }
 }

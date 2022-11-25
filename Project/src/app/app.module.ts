@@ -65,6 +65,7 @@ import { AppRoutingModule } from './app-routing.module';
       multi: true
     }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [AlertComponent]
 })
 export class AppModule {}
